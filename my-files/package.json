@@ -7,11 +7,19 @@
   },
   "scripts": {
     "prod": "node ./start.js",
+
+    "commentWatch": "// kick off node process, JS changes => restart process(server)",
     "watch": "nodemon ./start.js --ignore public/",
-    "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"💻,📦\" --prefix name",
+    "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"NODE,WEBPACK\" --prefix name",
+
+    "commentAssets": "// For CSS, client-side JS",
     "assets": "webpack -w --display-max-modules 0",
+
+    "commentAssets": "// Sample data",
     "sample": "node ./data/load-sample-data.js",
     "blowitallaway": "node ./data/load-sample-data.js --delete",
+
+    "commentNow": "// Deployment",
     "now": "now -e DB_USER=@db_user -e DB_PASS=@db_pass -e NODE_ENV=\"production\" -e PORT=80"
   },
   "browserslist": "last 3 versions",
