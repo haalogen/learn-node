@@ -66,7 +66,11 @@ app.use((req, res, next) => {
 });
 
 // After allllll that above middleware, we finally handle our own routes!
+// If anyone goes to route: /*
 app.use('/', routes);
+// Sometimes you'll want to make different router for Admin panel
+// app.use('/admin', adminRoutes);
+
 
 // If that above routes didnt work, we 404 them and forward to error handler
 app.use(errorHandlers.notFound);

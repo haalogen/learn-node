@@ -10,7 +10,7 @@
 
     "commentWatch": "// kick off node process, JS changes => restart process(server)",
     "watch": "nodemon ./start.js --ignore public/",
-    "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"NODE,WEBPACK\" --prefix name",
+    "start": "concurrently \"npm run watch\" \"npm run assets\" --names \"ND,WP\" --prefix name",
 
     "commentAssets": "// For CSS, client-side JS",
     "assets": "webpack -w --display-max-modules 0",
