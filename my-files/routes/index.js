@@ -6,13 +6,12 @@ router.get('/', (req, res, next) => {
   // `res` -- Response: object with methods for sending data to client
   // `next` -- function for passing stuff to middleware
 
-  const stan = { name: 'Stan', age: 69, cool: false };
-
   // res.send('Hey! It works!');
   // res.json(stan)
   // res.send(req.query.name);
-  res.json(req.query);
-  // res.json(req.body);
+  
+  // render(pugTemplateName)
+  res.render('hello');
 });
 
 // :varname
