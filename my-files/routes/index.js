@@ -1,21 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const storeController = require('../controllers/storeController');
 
-router.get('/', (req, res, next) => {
-  // `req` -- Request: object with info coming in
-  // `res` -- Response: object with methods for sending data to client
-  // `next` -- function for passing stuff to middleware
-
-  // res.send('Hey! It works!');
-  // res.json(stan)
-  // res.send(req.query.name);
-
-  // render(pugTemplateName)
-  res.render('hello', {
-    title: 'I love food',
-    dog: req.query.dog || ''
-  });
-});
+router.get('/', storeController.homePage);
 
 // :varname
 router.get('/reverse/:name', (req, res) => {
