@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const storeController = require('../controllers/storeController');
 
-router.get('/', storeController.homePage);
+router.get('/', storeController.myMiddleware, storeController.homePage);
 
 // :varname
 router.get('/reverse/:name', (req, res) => {
