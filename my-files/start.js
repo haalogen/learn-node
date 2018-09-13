@@ -20,10 +20,13 @@ mongoose.connect(process.env.DATABASE);
 mongoose.Promise = global.Promise;
 // Listen for any error mongoose can throw
 mongoose.connection.on('error', (err) => {
-  console.error(`🙅 🚫 🙅 🚫 🙅 🚫 🙅 🚫 → ${err.message}`);
+  console.error(` 🙅 🚫 → ${err.message}`);
 });
 
 // READY?! Let's go!
+
+// Import all of our models
+require('./models/Store');
 
 
 // Start our app!

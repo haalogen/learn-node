@@ -15,7 +15,7 @@
     "commentAssets": "// For CSS, client-side JS",
     "assets": "webpack -w --display-max-modules 0",
 
-    "commentAssets": "// Sample data",
+    "commentSample": "// Sample data",
     "sample": "node ./data/load-sample-data.js",
     "blowitallaway": "node ./data/load-sample-data.js --delete",
 
