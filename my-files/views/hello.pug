@@ -1,9 +1,11 @@
+extends layout
 
-.wrapper
-  - const upDog = dog.toUpperCase();
-  p.hello Hello my dog is #{dog.toUppercase()}
-  img.dog(src="dog.jpg" alt=`Dog ${upDog}`)
+//- Overrides the block from extended template
+block content
+  .wrapper
+    - const upDog = dog.toUpperCase();
+    p.hello Hello my dog is #{dog.toUpperCase()}
+    img.dog(src="dog.jpg" alt=`Dog ${upDog}`)
 
-h2
-  | Hello
-  em How are you?
+  h2
+    | Hello

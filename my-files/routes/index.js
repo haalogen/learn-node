@@ -9,9 +9,11 @@ router.get('/', (req, res, next) => {
   // res.send('Hey! It works!');
   // res.json(stan)
   // res.send(req.query.name);
-  
+
   // render(pugTemplateName)
-  res.render('hello');
+  res.render('hello', {
+    dog: req.query.dog
+  });
 });
 
 // :varname
