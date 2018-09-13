@@ -12,7 +12,8 @@ router.get('/', (req, res, next) => {
 
   // render(pugTemplateName)
   res.render('hello', {
-    dog: req.query.dog
+    title: 'I love food',
+    dog: req.query.dog || ''
   });
 });
 
