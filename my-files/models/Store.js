@@ -14,7 +14,6 @@ const storeSchema = new mongoose.Schema({
   description: {
     type: String,
     trim: true,
-
   },
   tags: [String],
 });
