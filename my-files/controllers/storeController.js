@@ -39,6 +39,8 @@ exports.getStores = async (req, res) => {
 }
 
 exports.updateStore = async (req, res) => {
+  // 0. Set the location data type to be 'Point' (MongoDB type)
+  req.body.location.type = 'Point';
   // 1. Find and update the store
   /**
    * findOneAndUpdate(

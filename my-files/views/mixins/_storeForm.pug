@@ -4,7 +4,7 @@ mixin storeForm(store = {})
     input(type="text" name="name" value=store.name required)
 
     label(for="description") Description
-    textarea(type="text" name="description" rows=10)= store.description
+    textarea(type="text" name="description" rows=6)= store.description
 
     //- Address, lng, lat
     - const { location: { address, coordinates = [] } = {} } = store;
