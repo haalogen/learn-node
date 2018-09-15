@@ -2,6 +2,7 @@
 node_modules/
 haters/
 video/
+uploads/
 
 
 .DS_Store

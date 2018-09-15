@@ -1,20 +1,29 @@
 mixin storeForm(store = {})
-  form(action=`/add/${store._id || ''}` method="POST" class="card")
+  //- enctype="multipart/form-data" is for uploading files through form
+  pre= h.dump(store)
+  form(action=`/add/${store._id || ''}` method="POST" class="card" enctype="multipart/form-data")
     label(for="name") Name
     input(type="text" name="name" value=store.name required)
 
     label(for="description") Description
     textarea(type="text" name="description" rows=6)= store.description
 
+    //- Image upload
+    label(for="photo") Photo
+      input#photo(type="file" name="photo" accept="image/gif, image/jpeg, image/png")
+      if store.photo
+        img(src=`/uploads/${store.photo}`, alt=store.name width=200)
+
     //- Address, lng, lat
     - const { location: { address, coordinates = [] } = {} } = store;
     label(for="address") Address
-    input(type="text" id="address" name="location[address]" value=address required)
+    input#address(type="text" name="location[address]" value=address required)
     label(for="lng") Address Lng
-    input(type="text" id="lng" name="location[coordinates][0]" value=(coordinates[0]) required)
+    input#lng(type="text" name="location[coordinates][0]" value=(coordinates[0]) required)
     label(for="lat") Address Lat
-    input(type="text" id="lat" name="location[coordinates][1]" value=(coordinates[1]) required)
+    input#lat(type="text" name="location[coordinates][1]" value=(coordinates[1]) required)
 
+    //- Tags
     - const choices = ['Wifi', 'Open Late', 'Family Friendly', 'Vega', 'Licensed'];
     - const tags = store.tags || [];
     ul.tags

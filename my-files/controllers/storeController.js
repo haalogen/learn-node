@@ -1,9 +1,23 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store'); // It's a Singleton (unique global object)
+const jimp = require('jimp'); // For resizing images
+const uuid = require('uuid'); // For unique fileNames
+const multer = require('multer');
+const multerOptions = {
+  // Where to keep uploaded file
+  storage: multer.memoryStorage(), // Not disk, but memory of the server (temporarily)
+  // Filters which file types to accept
+  // ES6, same as: fileFilter: function (...args) {...}
+  fileFilter(req, file, next) {
+    const isPhoto = file.mimetype.startsWith('image/'); // image/[jpeg|png|...]
+    if (isPhoto) {
+      next(null, true); // next(error, value); File is OK
+    } else {
+      next({ message: "That filetype isn't allowed" }, false);
+    }
+  }
+};
 
-exports.homePage = (req, res) => {
-  res.render('index');
-}
 
 exports.addStore = (req, res) => {
   res.render('editStore', { title: 'Add Store' });
@@ -38,6 +52,29 @@ exports.getStores = async (req, res) => {
   res.render('stores', { stores, title: 'Stores' });
 }
 
+exports.homePage = (req, res) => {
+  res.render('index');
+}
+
+exports.resize = async (req, res, next) => {
+  // Check if there is no new file to resize
+  // (Multer have put file to req.file)
+  if (!req.file) {
+    next(); // skip to the next middleware
+    return; // stop this function
+  }
+  const extension = req.file.mimetype.split('/')[1];
+  req.body.photo = `${uuid.v4()}.${extension}`;
+  // Now we resize
+  const photo = await jimp.read(req.file.buffer);
+  await photo
+    .resize(800, jimp.AUTO)
+    .quality(60)
+    .write(`./public/uploads/${req.body.photo}`);
+  // Once we have written the photo to our filesystem, keep going!
+  next();
+};
+
 exports.updateStore = async (req, res) => {
   // 0. Set the location data type to be 'Point' (MongoDB type)
   req.body.location.type = 'Point';
@@ -60,3 +97,6 @@ exports.updateStore = async (req, res) => {
   // 2. Redirect them to the store and tell them it worked
   res.redirect(`/stores/${store._id}/edit`)
 }
+
+// Upload middleware. It looks for a single upload field by id
+exports.upload = multer(multerOptions).single('photo');
