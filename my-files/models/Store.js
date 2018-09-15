@@ -4,6 +4,29 @@ mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
 const storeSchema = new mongoose.Schema({
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+  description: {
+    type: String,
+    trim: true,
+  },
+  location: {
+    type: {
+      type: String,
+      default: 'Point',
+    },
+    coordinates: [{
+      type: Number,
+      required: 'You must supply coordinates!',
+    }],
+    address: {
+      type: String,
+      trim: true,
+      required: 'You must supply an address!',
+    },
+  },
   name: {
     type: String,
     // Rule of thumb: Do data normalization as close as possible to the model
@@ -11,10 +34,6 @@ const storeSchema = new mongoose.Schema({
     required: 'Please enter a store name!',
   },
   slug: String,
-  description: {
-    type: String,
-    trim: true,
-  },
   tags: [String],
 });
 

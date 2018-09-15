@@ -1,4 +1,3 @@
-const fs = require('fs');
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store'); // It's a Singleton (unique global object)
 
@@ -25,7 +24,6 @@ exports.createStore = async (req, res) => {
 
 exports.editStore = async (req, res) => {
   // 1. Find the store given the ID
-
   const store = await Store.findOne({ _id: req.params.id });
 
   // 2. Confirm they are the owner of the store
