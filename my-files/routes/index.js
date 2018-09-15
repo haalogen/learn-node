@@ -14,7 +14,6 @@ router.get('/stores/:id/edit', catchErrors(storeController.editStore));
 
 // :varname
 router.get('/reverse/:name', (req, res) => {
-  console.log(req.params);
   const { name } = req.params;
   // Decompose string to array, reverse it, join back together
   const reversedName = [...name].reverse().join('')
