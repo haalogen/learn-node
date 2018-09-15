@@ -14,14 +14,14 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 // `dotenv` puts env vars to process.env.VARNAME
 require('dotenv').config({ path: 'variables.env' });
 
-// Connect to our Database and handle any bad connections
-mongoose.connect(process.env.DATABASE);
-// Tell Mongoose to use ES6 promises. So we can use async/await
-mongoose.Promise = global.Promise;
-// Listen for any error mongoose can throw
-mongoose.connection.on('error', (err) => {
-  console.error(` 🙅 🚫 → ${err.message}`);
-});
+// // Connect to our Database and handle any bad connections
+// mongoose.connect(process.env.DATABASE);
+// // Tell Mongoose to use ES6 promises. So we can use async/await
+// mongoose.Promise = global.Promise;
+// // Listen for any error mongoose can throw
+// mongoose.connection.on('error', (err) => {
+//   console.error(` 🙅 🚫 → ${err.message}`);
+// });
 
 // READY?! Let's go!
 
