@@ -54,9 +54,12 @@ exports.getStoreBySlug = async (req, res, next) => {
 
 exports.getStoresByTag = async (req, res) => {
   const tagName = req.params.tag;
+  const tagQuery = tagName || { $exists: true }; // Stores with "tagName" or not-empty field
   // Our custom method "getTagsList()"
-  const tags = await Store.getTagsList();
-  res.render('tag', { tags, title: 'Tags', tagName })
+  const tagsPromise = Store.getTagsList();
+  const storesPromise = Store.find({ tags: tagQuery });
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise]);
+  res.render('tag', { stores, tagName, tags, title: 'Tags', })
 };
 
 exports.getStores = async (req, res) => {
