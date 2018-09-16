@@ -52,6 +52,13 @@ exports.getStoreBySlug = async (req, res, next) => {
   res.render('store', { store, title: store.name });
 }
 
+exports.getStoresByTag = async (req, res) => {
+  const tagName = req.params.tag;
+  // Our custom method "getTagsList()"
+  const tags = await Store.getTagsList();
+  res.render('tag', { tags, title: 'Tags', tagName })
+};
+
 exports.getStores = async (req, res) => {
   // 1. Query database for a list of all stores
   const stores = await Store.find();
