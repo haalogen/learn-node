@@ -33,7 +33,7 @@ exports.createStore = async (req, res) => {
    * )
    */
   req.flash('success', `Successfully created "${store.name}". Care to leave a review?`);
-  res.redirect(`/store/${store.slug}`);
+  res.redirect(`/stores/${store.slug}`);
 }
 
 exports.editStore = async (req, res) => {

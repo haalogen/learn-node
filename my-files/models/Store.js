@@ -39,7 +39,7 @@ const storeSchema = new mongoose.Schema({
 });
 
 // Auto-generate slug before saving Store state
-storeSchema.pre('save', function (next) {
+storeSchema.pre('save', async function (next) {
   // Can't be an arrow function because we need `this` to be equal to store
   // that we are trying to save.
   if (!this.isModified('name')) {
@@ -47,8 +47,16 @@ storeSchema.pre('save', function (next) {
     return; // Stop this function from running
   }
   this.slug = slug(this.name);
+  // Find other stores that have a slug of stan, stan-2, ...
+  // RegEx: "?" means "optional"
+  const slugRegEx = new RegExp(`^(${this.slug})((-[0-9]+$)?)$`, 'i');
+  // "this.constructor" will be equal to Store by the time this function is run
+  const storesWithSlug = await this.constructor.find({ slug: slugRegEx });
+
+  if (storesWithSlug.length) {
+    this.slug = `${this.slug}-${storesWithSlug.length + 1}`;
+  }
   next();
-  // TODO: Make more resilient so the slugs are unique
 });
 
 
