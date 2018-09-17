@@ -61,7 +61,7 @@ storeSchema.pre('save', async function (next) {
 
 // Static method bound to Store model
 storeSchema.statics.getTagsList = function () {
-  // Use "function()" because we need "this" point at the Store
+  // Use "function()" because we need "this" point at the Store model
   return this.aggregate([
     { $unwind: '$tags' }, // Duplicate stores so that each object has single tag
     { $group: { _id: '$tags', count: { $sum: 1 } } }, // Group stores by tag and count number of stores in each group

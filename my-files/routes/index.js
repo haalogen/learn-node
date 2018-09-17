@@ -22,6 +22,12 @@ router.post('/add/:id',
 );
 
 router.get('/login', userController.loginForm)
+router.get('/register', userController.registerForm)
+// 1. Validate the registration data
+// 2. Register the user
+// 3. Log them in
+router.post('/register', userController.validateRegister);
+
 
 router.get('/stores', catchErrors(storeController.getStores));
 router.get('/stores/:id/edit', catchErrors(storeController.editStore));
