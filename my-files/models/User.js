@@ -9,10 +9,10 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     lowercase: true,
-    require: 'Please supply email address'
+    require: 'Please supply email address',
     trim: true,
     unique: true, // Will give ugly error
-    validate: [validator.isEmail, 'Invalid Email Address']
+    validate: [validator.isEmail, 'Invalid Email Address'],
   },
   name: {
     type: String,
@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-userSchema.plugin(passportLocalMongoose, { usernameField: 'email' }); // Adds auth for each user
+// Adds auth for each user: exposes "register()" method on "User" model
+userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 userSchema.plugin(mongodbErrorHandler); // For "prettifying" ugly MongoDB errors
 
 

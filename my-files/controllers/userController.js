@@ -2,13 +2,25 @@
  * "userController" is responsible for FORMS: login/logout, registration, password reset, ...
  */
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const promisify = require('es6-promisify');
 
-exports.loginForm = (req, res) => {
+exports.loginForm = (req, res, next) => {
   res.render('login', { title: 'Login' });
 }
 
 exports.registerForm = (req, res) => {
   res.render('register', { title: 'Register' });
+}
+
+exports.register = async (req, res, next) => {
+  const user = new User({ email: req.body.email, name: req.body.name });
+  // 'passport-local-mongoose' has callback-based API, so we convert it to Promise-based with
+  // promisify(func, bindingObject)
+  const registerWithPromise = promisify(User.register, User);
+
+  await registerWithPromise(user, req.body.password);
+  next(); // pass to next middleware: authController.login
 }
 
 exports.validateRegister = (req, res, next) => {
