@@ -18,7 +18,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: 'Please supply a name',
     trim: true,
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date,
 });
 
 // Add a virtual field to schema (not stored, but can be calculated on the fly)
