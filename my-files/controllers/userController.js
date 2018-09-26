@@ -5,6 +5,10 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 const promisify = require('es6-promisify');
 
+exports.account = (req, res) => {
+  res.render('account', { title: 'Edit Your Account' });
+}
+
 exports.loginForm = (req, res, next) => {
   res.render('login', { title: 'Login' });
 }
@@ -22,6 +26,26 @@ exports.register = async (req, res, next) => {
   await registerWithPromise(user, req.body.password);
   next(); // pass to next middleware: authController.login
 }
+
+exports.updateAccount = async (req, res) => {
+  const updates = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  const user = await User.findOneAndUpdate(
+    { _id: req.user._id }, // Query
+    { $set: updates }, // Update data
+    {
+      new: true, // Return new user as a result
+      runValidators: true,
+      context: 'query', // Needed by Mongoose
+    }, // Options
+  );
+
+  req.flash('success', 'Updated the profile!')
+  res.redirect('back'); // Redirect to the url that they came from
+};
 
 exports.validateRegister = (req, res, next) => {
   // Defend from registering with script tags, ...

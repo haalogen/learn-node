@@ -8,8 +8,10 @@ const { catchErrors } = require('../handlers/errorHandlers');
 
 router.get('/', catchErrors(storeController.getStores));
 
-router.get('/add', authController.isLoggedIn, storeController.addStore);
+router.get('/account', authController.isLoggedIn, userController.account);
+router.post('/account', catchErrors(userController.updateAccount));
 
+router.get('/add', authController.isLoggedIn, storeController.addStore);
 router.post('/add',
   storeController.upload,
   catchErrors(storeController.resize),
