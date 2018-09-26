@@ -21,6 +21,12 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+// Add a virtual field to schema (not stored, but can be calculated on the fly)
+userSchema.virtual('gravatar').get(function () {
+  const hash = md5(this.email);
+  return `https://gravatar.com/avatar/${hash}?s=200`;
+})
+
 // Adds auth for each user: exposes "register()" method on "User" model
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 userSchema.plugin(mongodbErrorHandler); // For "prettifying" ugly MongoDB errors
