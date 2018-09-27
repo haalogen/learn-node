@@ -63,6 +63,7 @@ exports.getStoresByTag = async (req, res) => {
 };
 
 exports.getStores = async (req, res) => {
+  console.log(req);
   // 1. Query database for a list of all stores
   const stores = await Store.find();
   res.render('stores', { stores, title: 'Stores' });
