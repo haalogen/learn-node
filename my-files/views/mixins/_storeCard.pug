@@ -1,12 +1,13 @@
 mixin storeCard(store = {})
   .store
-    //- pre= h.dump(store)
     .store__hero
       .store__actions
-        .store__action.store__action--edit
-          a(href=`/stores/${store._id}/edit`)
-            //- != Inserts HTML
-            != h.icon('pencil')
+        //- We don't populate "author" here, we only need its ObjectId
+        if user && store.author.equals(user._id)
+          .store__action.store__action--edit
+            a(href=`/stores/${store._id}/edit`)
+              //- != Inserts HTML
+              != h.icon('pencil')
       img(src=`/uploads/${store.photo || 'store.png'}`)
       h2.title
         a(href=`/stores/${store.slug}`) #{store.name}

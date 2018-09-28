@@ -4,6 +4,11 @@ mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
 const storeSchema = new mongoose.Schema({
+  author: { // Relationship between "Store" and "User"
+    type: mongoose.Schema.ObjectId, // Mongo ID
+    ref: 'User', // "author" is a reference to "User"
+    required: 'You must supply an author',
+  },
   created: {
     type: Date,
     default: Date.now,

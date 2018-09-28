@@ -18,12 +18,19 @@ const multerOptions = {
   }
 };
 
+const confirmOwner = (store, user) => {
+  // "store.author" is ObjectID so we need to use "equals()" method to compare to simple string
+  if (!store.author.equals(user._id)) {
+    throw Error('You must own a store in order to edit it!');
+  }
+}
 
 exports.addStore = (req, res) => {
   res.render('editStore', { title: 'Add Store' });
 }
 
 exports.createStore = async (req, res) => {
+  req.body.author = req.user._id; // Take the ID of the currently logged in user
   // save() is Async: Sends request to MongoDB, returns with new Store state / Error
   const store = await (new Store(req.body)).save();
   /**
@@ -39,15 +46,16 @@ exports.createStore = async (req, res) => {
 exports.editStore = async (req, res) => {
   // 1. Find the store given the ID
   const store = await Store.findOne({ _id: req.params.id });
-
   // 2. Confirm they are the owner of the store
-  // TODO
+  confirmOwner(store, req.user);
   // 3. Render out the edit form so the user can update their store
   res.render('editStore', { store, title: `Edit "${store.name}"` });
 }
 
 exports.getStoreBySlug = async (req, res, next) => {
-  const store = await Store.findOne({ slug: req.params.slug });
+  const store = await Store.findOne({ slug: req.params.slug })
+    // Substitutes "author" ObjectId with User object with "_id" that is equal to given ObjectId
+    .populate('author');
   if (!store) return next();
   res.render('store', { store, title: store.name });
 }
@@ -63,7 +71,6 @@ exports.getStoresByTag = async (req, res) => {
 };
 
 exports.getStores = async (req, res) => {
-  console.log(req);
   // 1. Query database for a list of all stores
   const stores = await Store.find();
   res.render('stores', { stores, title: 'Stores' });
