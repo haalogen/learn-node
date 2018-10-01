@@ -64,4 +64,9 @@ router.get('/reverse/:name', (req, res) => {
   res.send(reversedName);
 })
 
+/*
+  API
+ */
+router.get('/api/v1/search', catchErrors(storeController.searchStores));
+
 module.exports = router;

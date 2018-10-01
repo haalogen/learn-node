@@ -43,6 +43,12 @@ const storeSchema = new mongoose.Schema({
   tags: [String],
 });
 
+// Define our indexes
+storeSchema.index({
+  name: 'text',
+  description: 'text', // It will be a "Compound Index" (built from several fields)
+})
+
 // Auto-generate slug before saving Store state
 storeSchema.pre('save', async function (next) {
   // Can't be an arrow function because we need `this` to be equal to store

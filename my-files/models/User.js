@@ -29,7 +29,7 @@ userSchema.virtual('gravatar').get(function () {
   return `https://gravatar.com/avatar/${hash}?s=200`;
 })
 
-// Adds auth for each user: exposes "register()" method on "User" model
+// Adds auth for each user: exposes "register()" method on "User" model; builds index by field "email"
 userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 userSchema.plugin(mongodbErrorHandler); // For "prettifying" ugly MongoDB errors
 
