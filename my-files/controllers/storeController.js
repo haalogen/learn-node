@@ -101,20 +101,20 @@ exports.resize = async (req, res, next) => {
 
 exports.searchStores = async (req, res) => {
   const stores = await Store
-  // First: find stores that match
-  .find({
-    $text: {
-      $search: req.query.q,
-    }
-  }, { // Project (add field) with metadata of query
-    score: { $meta: 'textScore' } // "textScore" is a metric of text match
-  })
-  // Then sort the stores
-  .sort({ // Mongo Sort by
-    score: { $meta: 'textScore' }
-  })
-  // Limit to only Top-10 results
-  .limit(10)
+    // First: find stores that match
+    .find({
+      $text: {
+        $search: req.query.q,
+      }
+    }, { // Project (add field) with metadata of query
+      score: { $meta: 'textScore' } // "textScore" is a metric of text match
+    })
+    // Then sort the stores
+    .sort({ // Mongo Sort by
+      score: { $meta: 'textScore' }
+    })
+    // Limit to only Top-10 results
+    .limit(10)
 
   res.json(stores);
 }
