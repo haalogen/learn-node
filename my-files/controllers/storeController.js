@@ -80,6 +80,25 @@ exports.homePage = (req, res) => {
   res.render('index');
 }
 
+exports.mapStores = async (req, res) => {
+  const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
+  // Mongo query
+  const q = {
+    location: {
+      $near: { // Search for geographically near items
+        $geometry: {
+          type: 'Point',
+          coordinates,
+        },
+        $maxDistance: 10000, // Metres === 10 km
+      }
+    }
+  };
+
+  const stores = await Store.find(q);
+  res.json(stores);
+}
+
 exports.resize = async (req, res, next) => {
   // Check if there is no new file to resize
   // (Multer have put file to req.file)

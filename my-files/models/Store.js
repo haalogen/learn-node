@@ -49,6 +49,8 @@ storeSchema.index({
   description: 'text', // It will be a "Compound Index" (built from several fields)
 })
 
+storeSchema.index({ location: '2dsphere' }); // Save geo metadata for field "location"
+
 // Auto-generate slug before saving Store state
 storeSchema.pre('save', async function (next) {
   // Can't be an arrow function because we need `this` to be equal to store
