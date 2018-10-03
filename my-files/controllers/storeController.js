@@ -90,12 +90,16 @@ exports.mapStores = async (req, res) => {
           type: 'Point',
           coordinates,
         },
-        $maxDistance: 10000, // Metres === 10 km
+        $maxDistance: 10 * 1000, // Metres
       }
     }
   };
 
-  const stores = await Store.find(q);
+  const stores = await Store
+    .find(q)
+    .select('description location name slug') // Specify which fields of Model we want to get
+    .limit(10);
+  // '-author -tags -created' -- Specify fields to exclude from result
   res.json(stores);
 }
 
