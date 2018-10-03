@@ -37,6 +37,8 @@ router.post('/login', authController.login)
 
 router.get('/logout', authController.logout);
 
+router.get('/map', storeController.mapPage);
+
 router.get('/register', userController.registerForm)
 // 1. Validate the registration data
 // 2. Register the user

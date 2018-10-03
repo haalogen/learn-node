@@ -80,6 +80,10 @@ exports.homePage = (req, res) => {
   res.render('index');
 }
 
+exports.mapPage = (req, res) => {
+  res.render('map', { title: 'Map' });
+}
+
 exports.mapStores = async (req, res) => {
   const coordinates = [req.query.lng, req.query.lat].map(parseFloat);
   // Mongo query
@@ -97,7 +101,7 @@ exports.mapStores = async (req, res) => {
 
   const stores = await Store
     .find(q)
-    .select('description location name slug') // Specify which fields of Model we want to get
+    .select('description location name photo slug') // Specify which fields of Model we want to get
     .limit(10);
   // '-author -tags -created' -- Specify fields to exclude from result
   res.json(stores);
