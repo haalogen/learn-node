@@ -39,9 +39,7 @@ function typeAhead (searchBox) {
         // Tell them nothing came back
         searchResults.innerHTML = dompurify.sanitize(`<div class="search__result">No results for <strong>${this.value}</strong> found!</div>`);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error);
   });
 
   // Handle search results list navigating
