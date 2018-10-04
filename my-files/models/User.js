@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema({
     unique: true, // Will give ugly error
     validate: [validator.isEmail, 'Invalid Email Address'],
   },
+  hearts: [ // Array of IDs
+    { type: mongoose.Schema.ObjectId, ref: 'Store' }, // "Heart" is a reference to the "Store" item
+  ],
   name: {
     type: String,
     require: 'Please supply a name',

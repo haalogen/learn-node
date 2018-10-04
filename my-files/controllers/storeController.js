@@ -76,6 +76,10 @@ exports.getStores = async (req, res) => {
   res.render('stores', { stores, title: 'Stores' });
 }
 
+exports.heartStore = async (req, res) => {
+  res.json({})
+}
+
 exports.homePage = (req, res) => {
   res.render('index');
 }

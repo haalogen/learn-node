@@ -70,6 +70,7 @@ router.get('/reverse/:name', (req, res) => {
   API
  */
 router.get('/api/v1/search', catchErrors(storeController.searchStores));
+router.post('/api/v1/stores/:id/heart', catchErrors(storeController.heartStore));
 router.get('/api/v1/stores/near', catchErrors(storeController.mapStores));
 
 module.exports = router;
