@@ -6,7 +6,6 @@ function createSearchResultsHTML (stores) {
     return `
       <a href="/stores/${store.slug}" class="search__result">
         <strong>${store.name}</strong>
-        <p>${store.description}</p>
       </a>
     `;
   }).join('');

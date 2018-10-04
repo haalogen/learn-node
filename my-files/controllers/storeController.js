@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store'); // It's a Singleton (unique global object)
+const User = mongoose.model('User'); // It's a Singleton (unique global object)
 const jimp = require('jimp'); // For resizing images
 const uuid = require('uuid'); // For unique fileNames
 const multer = require('multer');
@@ -77,7 +78,17 @@ exports.getStores = async (req, res) => {
 }
 
 exports.heartStore = async (req, res) => {
-  res.json({})
+  const hearts = req.user.hearts.map(obj => obj.toString());
+
+  const operator = hearts.includes(req.params.id) ? '$pull' : '$addToSet' // Remove or Add Unique
+  const user = await User
+    .findByIdAndUpdate(
+      req.user._id,
+      { [operator]: { hearts: req.params.id } },
+      { new: true }, // Return the updated user
+    );
+
+  res.json(user)
 }
 
 exports.homePage = (req, res) => {
