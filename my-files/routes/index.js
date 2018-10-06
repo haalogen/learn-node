@@ -32,6 +32,8 @@ router.post('/add/:id',
   catchErrors(storeController.updateStore),
 );
 
+router.get('/hearts', authController.isLoggedIn, catchErrors(storeController.getHearts))
+
 router.get('/login', userController.loginForm)
 router.post('/login', authController.login)
 

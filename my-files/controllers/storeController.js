@@ -53,6 +53,15 @@ exports.editStore = async (req, res) => {
   res.render('editStore', { store, title: `Edit "${store.name}"` });
 }
 
+exports.getHearts = async (req, res) => {
+  // Query database for a list of stores hearted by current user
+  const stores = await Store.find({ // Find any stores
+    _id: { $in: req.user.hearts }, // Where the "_id" is in the given array
+  });
+
+  res.render('stores', { stores, title: 'Hearted Stores' });
+}
+
 exports.getStoreBySlug = async (req, res, next) => {
   const store = await Store.findOne({ slug: req.params.slug })
     // Substitutes "author" ObjectId with User object with "_id" that is equal to given ObjectId
