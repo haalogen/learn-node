@@ -65,7 +65,7 @@ exports.getHearts = async (req, res) => {
 exports.getStoreBySlug = async (req, res, next) => {
   const store = await Store.findOne({ slug: req.params.slug })
     // Substitutes "author" ObjectId with User object with "_id" that is equal to given ObjectId
-    .populate('author');
+    .populate('author reviews');
   if (!store) return next();
   res.render('store', { store, title: store.name });
 }

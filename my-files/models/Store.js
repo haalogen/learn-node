@@ -41,6 +41,10 @@ const storeSchema = new mongoose.Schema({
   photo: String,
   slug: String,
   tags: [String],
+}, {
+  // Put virtual fields to resulting JSON and Object
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true },
 });
 
 // Define our indexes
@@ -82,6 +86,13 @@ storeSchema.statics.getTagsList = function () {
   ]);
 }
 
+// Find reviews where store._id === review.store (kind of JOIN in SQL)
+// Virtual fields don't go to JSON unless you explicitly ask for it: "store.reviews"
+storeSchema.virtual('reviews', {
+  ref: 'Review', // What model to link?
+  localField: '_id', // Which field on the store?
+  foreignField: 'store', // Which field on the review?
+});
 
 // "Main" export of the file
 module.exports = mongoose.model('Store', storeSchema);
