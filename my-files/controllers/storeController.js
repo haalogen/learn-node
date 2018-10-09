@@ -86,6 +86,11 @@ exports.getStores = async (req, res) => {
   res.render('stores', { stores, title: 'Stores' });
 }
 
+exports.getTopStores = async (req, res) => {
+  const stores = await Store.getTopStores();
+  res.render('topStores', { stores, title: 'Top Stores' });
+}
+
 exports.heartStore = async (req, res) => {
   const hearts = req.user.hearts.map(obj => obj.toString());
 

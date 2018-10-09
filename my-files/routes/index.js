@@ -61,6 +61,8 @@ router.get('/stores/:slug', catchErrors(storeController.getStoreBySlug));
 router.get('/tags', catchErrors(storeController.getStoresByTag));
 router.get('/tags/:tag', catchErrors(storeController.getStoresByTag));
 
+router.get('/top', catchErrors(storeController.getTopStores));
+
 // :varname
 router.get('/reverse/:name', (req, res) => {
   const { name } = req.params;

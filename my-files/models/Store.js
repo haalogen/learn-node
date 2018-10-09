@@ -55,6 +55,15 @@ storeSchema.index({
 
 storeSchema.index({ location: '2dsphere' }); // Save geo metadata for field "location"
 
+function autopopulate(next) {
+  this.populate('reviews');
+  next();
+}
+
+// Auto-populate reviews when find any store
+storeSchema.pre('find', autopopulate);
+storeSchema.pre('findOne', autopopulate);
+
 // Auto-generate slug before saving Store state
 storeSchema.pre('save', async function (next) {
   // Can't be an arrow function because we need `this` to be equal to store
@@ -77,7 +86,7 @@ storeSchema.pre('save', async function (next) {
 });
 
 // Static method bound to Store model
-storeSchema.statics.getTagsList = function () {
+storeSchema.statics.getTagsList = function() {
   // Use "function()" because we need "this" point at the Store model
   return this.aggregate([
     { $unwind: '$tags' }, // Duplicate stores so that each object has single tag
@@ -86,8 +95,40 @@ storeSchema.statics.getTagsList = function () {
   ]);
 }
 
+storeSchema.statics.getTopStores = function() {
+  return this.aggregate([ // Low-level MongoDB function
+    // Lookup stores and populate their reviews
+    // MongoDB does: 'Review' (model name) -> 'reviews' (lowercase + 's')
+    { $lookup: { from: 'reviews', localField: '_id', foreignField: 'store', as: 'reviews' }},
+    // Filter for only items that have 2 or more reviews
+    // 'reviews.1' -- second item from collection "reviews"
+    { $match: { 'reviews.1': { $exists: true }}},
+    // Add the average reviews field
+    // "$" in "$reviews" means the data is from previous step of pipeline
+
+    // --- (MongoDB 3.2)
+    { $project: {
+      name: '$$ROOT.name', // '$$ROOT is original document
+      photo: '$$ROOT.photo',
+      reviews: '$$ROOT.reviews',
+      slug: '$$ROOT.slug',
+      averageRating: { $avg: '$reviews.rating' },
+    }},
+
+    // --- Alternative way (MongoDB 3.4+)
+    // { $addFields: { // Adds new fields
+    //   averageRating: { $avg: '$reviews.rating' },
+    // }}
+
+    // Sort it by our new field, highest reviews first
+    { $sort: { averageRating: -1 }},
+    // Limit to at most 10
+    { $limit: 10 },
+  ]);
+}
+
 // Find reviews where store._id === review.store (kind of JOIN in SQL)
-// Virtual fields don't go to JSON unless you explicitly ask for it: "store.reviews"
+// Virtual fields (Mongoose feature) don't go to JSON unless you explicitly ask for it: "store.reviews"
 storeSchema.virtual('reviews', {
   ref: 'Review', // What model to link?
   localField: '_id', // Which field on the store?
