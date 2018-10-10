@@ -81,9 +81,34 @@ exports.getStoresByTag = async (req, res) => {
 };
 
 exports.getStores = async (req, res) => {
-  // 1. Query database for a list of all stores
-  const stores = await Store.find();
-  res.render('stores', { stores, title: 'Stores' });
+  const page = req.params.page || 1;
+  if (page < 1) {
+    // Handle pages 0 or negative page numbers
+    res.redirect('/stores/page/1');
+    return;
+  }
+  const limit = 4;
+  const skip = (page - 1) * limit;
+
+  // Query database for a list of stores for current page
+  const storesPromise = Store
+    .find()
+    .sort({ created: 'desc' }) // Sort by creation date
+    .skip(skip)
+    .limit(limit)
+
+  // Total number of stores in the DB
+  const countPromise = Store.count();
+
+  const [stores, count] = await Promise.all([storesPromise, countPromise]);
+  const pages = Math.ceil(count / limit);
+
+  if (page > pages) {
+    req.flash('info', `Hey! You asked for page ${page}. But that page doesn't exist. So I put you on page ${pages}`);
+    res.redirect(`/stores/page/${pages}`);
+    return;
+  }
+  res.render('stores', { count, page, pages, stores, title: 'Stores' });
 }
 
 exports.getTopStores = async (req, res) => {
